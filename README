@@ -1,26 +1,26 @@
-Vim with Rspec
+Vim with Rspec 2.x
+
+NOTE: This version is drastically different from the original taq/vim-rspec
+fork due to a large refactoring of the main codebase into a modularized
+form. If you have an old fork with custom changes, you may want to look
+at what's been done here.
 
 INSTALL
 -------
-This plugin make easy to run the spec command inside Vim. You need Hpricot (http://wiki.github.com/why/hpricot) 
-OR xsltproc (http://www.xmlsoft.org/XSLT/xsltproc2.html) and grep (http://www.gnu.org/software/grep) to use it.
-Hpricot takes precedence over xsltproc. 
-There are four files on the package: the Vim script, the Ruby script, the XSL file and the syntax file.
+ * Requires: gem install hpricot
+ * Install with pathogen: clone/submodule into vim/bundle
 
-To install, unpack the files on your ~/.vim directory and source it to make it available. You
-can also use the Makefile to install the files, just type:
-make install
+TODO
+-------
+ * Phase out support for xslt. This code is doing too much right now. The ruby transform is fine.
+ * Add support for running single it-blocks
+ * Support for rspec2 (longer term, as I currently don't use it myself)
+ * Custom paths for RunSpecs (e.g. fast_specs dir)
 
 USAGE
 -----
-There are two commands available: 
-
-You can run RunSpec and spec will run with the current file (if it's a *_spec.rb file) 
-You can run RunSpecs and spec will run with all the files inside the spec directory. 
-
-After some of the commands above runs, it will open a new window with the result, where you can click on the error 
-lines where there's a file path with the line number and it will open on a new window, moving the cursor to the 
-line where the error is.
+ * :RunSpec for current file or :RunSpecs for all files in spec dir
+ * A split will open at the bottom. You can hit 'n' to go to the next error, or navigate to it and hit Enter to go to the line in the file.
 
 Enhancements by @skwp (Yan Pritzker)
 -----
