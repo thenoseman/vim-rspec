@@ -3,19 +3,25 @@ class FailureRenderer
 
   def initialize(failure)
     @failure = failure
-    puts "  #{failure_message}"
-    puts "  #{failure_location}"
+    puts failure_message
+    puts failure_location
     puts backtrace_details
   end
 
   private
 
+  def indent(msg)
+    "  #{msg}"
+  end
+
   def failure_location
-    unescape((@failure/"div[@class='backtrace']/pre").inner_html)
+    unescape(
+      (@failure/"div[@class='backtrace']/pre").inner_html.split("\n").map { |line| "#{indent(line.strip)}" }.join("\n")
+    )
   end
 
   def failure_message
-    unescape((@failure/"div[@class='message']/pre").inner_html.gsub(/\n/,'').gsub(/\s+/,' '))
+    indent(unescape((@failure/"div[@class='message']/pre").inner_html.gsub(/\n/,'').gsub(/\s+/,' ')))
   end
 
   def backtrace_details
