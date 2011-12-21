@@ -151,6 +151,7 @@ function! s:RunSpecMain(type)
   silent exec 'nnoremap <silent> <buffer> N ?/\/.*\:<cr>:call <SID>TryToOpen()<cr>'
   silent exec "nnoremap <buffer> q :q<CR>"
   setl nolist
+  setl nohls
   setl foldmethod=expr
   setl foldexpr=getline(v:lnum)=~'^\+'
   setl foldtext=\"+--\ \".string(v:foldend-v:foldstart+1).\"\ passed\ \"
