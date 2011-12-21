@@ -10,20 +10,13 @@
 " To install, unpack the files on your ~/.vim directory and source it 
 "
 " The following options can be set/overridden in your .vimrc
-"   * g:RspecXSLPath     :: Path to xsl file
 "   * g:RspecRBFilePath  :: Path to vim-rspec.rb
 "   * g:RspecBin         :: Rspec binary command (in rspec 2 this is 'rspec')
 "   * g:RspecOpts        :: Opts to send to rspec call
 
-let s:xsltproc_cmd	= ""
 let s:hpricot_cmd		= ""
-let s:xslt				= 0
 let s:hpricot			= 0
 let s:helper_dir = expand("<sfile>:h")
-
-function! s:find_xslt()
-	return system("xsltproc --version | head -n1")
-endfunction
 
 function! s:find_hpricot()
 	return system("gem search -i hpricot")
@@ -65,15 +58,11 @@ function! s:RunSpecMain(type)
 	let l:bufn = bufname("%")
 
 
-	if len(s:xsltproc_cmd)<1
-		let s:xsltproc_cmd = s:find_xslt()
-		let s:xslt  = match(s:xsltproc_cmd,'\d')>=0
-	end		
 	if len(s:hpricot_cmd)<1
 		let s:hpricot_cmd = s:find_hpricot()
 		let s:hpricot = match(s:hpricot_cmd,'true')>=0
 	end
-	if !s:hpricot && !s:xslt 
+	if !s:hpricot 
 		call s:error_msg("You need the hpricot gem or xsltproc to run this script.")
 		return
 	end
@@ -86,18 +75,13 @@ function! s:RunSpecMain(type)
       let l:default_cmd = "rspec"
    end
 
-	" filters
-	let l:xsl   = s:fetch("RspecXSLPath", s:helper_dir."/vim-rspec.xsl")
-	let l:rubys = s:fetch("RspecRBPath", s:helper_dir."/vim-rspec.rb")
+  " filter
+  let l:filter = "ruby ". s:fetch("RspecRBPath", s:helper_dir."/vim-rspec.rb")
 
-	" hpricot gets the priority
-	let l:type		= s:hpricot ? "hpricot" : "xsltproc"
-	let l:filter	= s:hpricot ? "ruby ".l:rubys : "xsltproc --novalid --html ".l:xsl." - "
-
-	" run just the current file
+  " run just the current file
 	if a:type=="file"
 		if match(l:bufn,'_spec.rb')>=0
-			call s:notice_msg("Running spec on the current file with ".l:type." ...")
+			call s:notice_msg("Running spec on the current file...")
       let l:spec_bin = s:fetch("RspecBin",l:default_cmd)
       let l:spec_opts = s:fetch("RspecOpts", "")
       let l:spec = l:spec_bin . " " . l:spec_opts . " -f h " . l:bufn
@@ -108,7 +92,7 @@ function! s:RunSpecMain(type)
 	else
 		let l:dir = expand("%:p:h")
 		if isdirectory(l:dir."/spec")>0
-			call s:notice_msg("Running spec on the spec directory with ".l:type." ...")
+			call s:notice_msg("Running spec on the spec directory ...")
 		else
 			" try to find a spec directory on the current path
 			let l:tokens = split(l:dir,"/")
@@ -122,7 +106,7 @@ function! s:RunSpecMain(type)
 				end
 			endfor
 			if len(l:dir)>0
-				call s:notice_msg("Running spec with ".l:type." on the spec directory found (".l:dir.") ...")
+				call s:notice_msg("Running spec with on the spec directory found (".l:dir.") ...")
 			else
 				call s:error_msg("No ".l:dir."/spec directory found")
 				return
