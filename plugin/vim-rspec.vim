@@ -16,7 +16,6 @@
 "   * g:RspecOpts        :: Opts to send to rspec call
 
 let s:xsltproc_cmd	= ""
-let s:grep_cmd			= ""
 let s:hpricot_cmd		= ""
 let s:xslt				= 0
 let s:hpricot			= 0
@@ -24,10 +23,6 @@ let s:helper_dir = expand("<sfile>:h")
 
 function! s:find_xslt()
 	return system("xsltproc --version | head -n1")
-endfunction
-
-function! s:find_grep()
-	return system("grep --version | head -n1")
 endfunction
 
 function! s:find_hpricot()
@@ -82,13 +77,6 @@ function! s:RunSpecMain(type)
 		call s:error_msg("You need the hpricot gem or xsltproc to run this script.")
 		return
 	end
-	if len(s:grep_cmd)<1
-		let s:grep_cmd = s:find_grep()
-		if match(s:grep_cmd,'\d')<0
-			call s:error_msg("You need grep to run this script.")
-			return
-		end
-	end		
 
    " find the installed rspec command
    let l:default_cmd = ""
@@ -149,7 +137,7 @@ function! s:RunSpecMain(type)
 	end		
 
 	" run the spec command
-	let s:cmd	= l:spec." | ".l:filter." | grep \"^[-\+\[\\#\\* ]\""
+	let s:cmd	= l:spec." | ".l:filter
 	echo
 
 
