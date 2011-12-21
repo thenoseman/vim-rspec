@@ -37,4 +37,6 @@ Run using Cmd-Shift-R:
 
   map <D-R> :RunSpec<cr>
 
-
+Credits
+-----
+ * Original plugin by Eustáquio Rangel: https://github.com/taq
