@@ -54,7 +54,22 @@ function! s:fetch(varname, default)
   endif
 endfunction
 
+function! s:createOutputWin()
+  let splitLocation = "botright "
+  let splitSize = "20"
+
+  if bufexists('RSpecOutput')
+    silent! bw! RSpecOutput
+  end
+
+  silent! exec splitLocation . ' ' . splitSize . ' new'
+  silent! exec "edit RSpecOutput"
+endfunction
+
 function! s:RunSpecMain(type)
+	let l:bufn = bufname("%")
+
+
 	if len(s:xsltproc_cmd)<1
 		let s:xsltproc_cmd = s:find_xslt()
 		let s:xslt  = match(s:xsltproc_cmd,'\d')>=0
@@ -74,7 +89,6 @@ function! s:RunSpecMain(type)
 			return
 		end
 	end		
-	let l:bufn = bufname("%")
 
    " find the installed rspec command
    let l:default_cmd = ""
@@ -138,17 +152,19 @@ function! s:RunSpecMain(type)
 	let s:cmd	= l:spec." | ".l:filter." 2> /dev/null | grep \"^[-\+\[\\#\\* ]\""
 	echo
 
-	" put the result on a new buffer
-	silent exec "new" 
-	setl buftype=nofile
-	silent exec "r! ".s:cmd
-	setl syntax=vim-rspec
-	silent exec "nnoremap <buffer> <cr> :call <SID>TryToOpen()<cr>"
-	silent exec "nnoremap <buffer> q :q<CR>"
-	setl foldmethod=expr
-	setl foldexpr=getline(v:lnum)=~'^\+'
-	setl foldtext=\"+--\ \".string(v:foldend-v:foldstart+1).\"\ passed\ \"
-	call cursor(1,1)	
+
+  "put the result on a new buffer
+  call s:createOutputWin()
+  setl buftype=nofile
+  silent exec "r! ".s:cmd
+  setl syntax=vim-rspec
+  silent exec "nnoremap <buffer> <cr> :call <SID>TryToOpen()<cr>"
+  silent exec "nnoremap <buffer> q :q<CR>"
+  setl foldmethod=expr
+  setl foldexpr=getline(v:lnum)=~'^\+'
+  setl foldtext=\"+--\ \".string(v:foldend-v:foldstart+1).\"\ passed\ \"
+  call cursor(1,1)	
+
 endfunction
 
 function! s:TryToOpen()
