@@ -159,6 +159,7 @@ function! s:RunSpecMain(type)
   silent exec "r! ".s:cmd
   setl syntax=vim-rspec
   silent exec "nnoremap <buffer> <cr> :call <SID>TryToOpen()<cr>"
+  silent exec 'nnoremap <silent> <buffer> n /^\s*\//<cr>:call <SID>TryToOpen()<cr>'
   silent exec "nnoremap <buffer> q :q<CR>"
   setl foldmethod=expr
   setl foldexpr=getline(v:lnum)=~'^\+'

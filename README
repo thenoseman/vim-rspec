@@ -22,4 +22,18 @@ After some of the commands above runs, it will open a new window with the result
 lines where there's a file path with the line number and it will open on a new window, moving the cursor to the 
 line where the error is.
 
-Of course, you can create some mappings to make easier to call the commands.
+Enhancements by @skwp (Yan Pritzker)
+-----
+ * Improved colors (for Solarized, specifically)
+ * Run in same window, do not create a new window for every run
+ * When browsing errors in rspec window, hitting enter takes you to the code in other split (do not create new window)
+ * Ability to hit 'n' in the rspec output to go to the next error (and the corresponding code in the split)
+ * Unescape html so that brackets in stacktraces are correctly displayed
+
+Suggested Key Mappings
+-----
+Run using Cmd-Shift-R:
+
+  map <D-R> :RunSpec<cr>
+
+
