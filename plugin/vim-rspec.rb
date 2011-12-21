@@ -23,15 +23,16 @@ class RSpecOutputHandler
     end
 
     def self.render_specs(context)
-      classes = {"spec passed"=>"+","spec failed"=>"-","spec not_implemented"=>"#"}
-
       (context/"dd").each do |dd|
-        txt = (dd/"span:first").inner_html
-        puts "#{classes[dd[:class]]} #{txt}"
-
-        next if dd[:class]!="spec failed"
-        render_failure_details(dd)
+        render_spec_descriptor(dd)
+        render_failure_details(dd) if dd[:class]=="spec failed"
       end
+    end
+
+    def self.render_spec_descriptor(dd)
+      classes = {"spec passed"=>"+","spec failed"=>"-","spec not_implemented"=>"#"}
+      txt = (dd/"span:first").inner_html
+      puts "#{classes[dd[:class]]} #{txt}"
     end
 
     def self.render_failure_details(example_details)
@@ -69,9 +70,35 @@ class RSpecOutputHandler
   def render_header
     stats = (@doc/"script").select {|script| script.innerHTML =~ /duration|totals/ }
     stats.map! do |script| 
-      script.inner_html.scan(/".*"/).first.gsub(/<\/?strong>/,"")
+      script.inner_html.scan(/".*"/).first.gsub(/<\/?strong>/,"").gsub(/\"/,'')
     end
-    puts "* #{stats.join(" | ").gsub(/\"/,'')}"
+    failure_success_messages,other_stats = stats.partition {|stat| stat =~ /failure/}
+    render_red_green_header(failure_success_messages.first)
+    other_stats.each do |stat|
+      puts "*#{stat}"
+    end
+    puts " "
+  end
+
+  def render_red_green_header(failure_success_messages)
+    success,failures = failure_success_messages.split(", ")
+    fail_count = failures.match(/(\d+) failure/)[1].to_i
+    success_count = success.match(/(\d+) example/)[1].to_i
+
+    if fail_count > 0
+      puts "--------------------------"
+      puts "-#{failures}" 
+      puts "--------------------------"
+      if 1.to_i > 0
+        puts "+#{success_count} passes"
+      end
+    else
+      puts "+++++++++++++++++++++++++++"
+      puts "+All #{success_count} Specs Pass!"
+      puts "+++++++++++++++++++++++++++"
+    end
+
+
     puts " "
   end
 

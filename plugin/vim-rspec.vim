@@ -149,7 +149,7 @@ function! s:RunSpecMain(type)
 	end		
 
 	" run the spec command
-	let s:cmd	= l:spec." | ".l:filter." 2> /dev/null | grep \"^[-\+\[\\#\\* ]\""
+	let s:cmd	= l:spec." | ".l:filter." | grep \"^[-\+\[\\#\\* ]\""
 	echo
 
 

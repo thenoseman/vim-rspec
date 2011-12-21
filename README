@@ -24,6 +24,7 @@ line where the error is.
 
 Enhancements by @skwp (Yan Pritzker)
 -----
+ * Failures and Success is now displayed prominently at the top in green or red
  * Improved colors (for Solarized, specifically)
  * Run in same window, do not create a new window for every run
  * When browsing errors in rspec window, hitting enter takes you to the code in other split (do not create new window)
