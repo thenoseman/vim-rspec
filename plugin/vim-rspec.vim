@@ -174,7 +174,14 @@ function! s:TryToOpen()
 		return
 	end
 	let l:tokens = split(l:line,":")
-	silent exec "sp ".substitute(l:tokens[0],'/^\s\+',"","")
+
+  " move back to the other window, if available
+  " if there is no other window this will do nothing
+  wincmd w
+
+  " open the file in question (either in the split)
+  " that was already open, or in the current win
+	exec "e ".substitute(l:tokens[0],'/^\s\+',"","")
 	call cursor(l:tokens[1],1)
 endfunction
 
