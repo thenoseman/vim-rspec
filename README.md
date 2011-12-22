@@ -20,7 +20,7 @@ USAGE
  * :RunSpec for current file
  * :RunSpecLine for current line (current 'it' block)
  * :RunSpecs for all files in spec dir
- * A split will open vertically on the right (if you prefer horizontal, let g:RspecSplitHorizontal=1)
+ * A split will open vertically on the right (if you prefer vertical, let g:RspecSplitHorizontal=0)
  * You can hit 'n' to go to the next error, or navigate to it and hit Enter to go to the line in the file.
 
 Enhancements by @skwp (Yan Pritzker)
@@ -33,7 +33,7 @@ Enhancements by @skwp (Yan Pritzker)
  * Ability to hit 'n' in the rspec output to go to the next error (and the corresponding code in the split)
  * Unescape html so that brackets in stacktraces are correctly displayed
  * Took out xslt support to focus the project on a ruby-based formatter
- * Default to vertical split, use "let g:RspecSplitHorizontal=1" in vimrc to split horizontally
+ * Default to horizontal split, use "let g:RspecSplitHorizontal=0" in vimrc to split vertical 
 
 Suggested Key Mappings
 -----

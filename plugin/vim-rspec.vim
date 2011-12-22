@@ -13,7 +13,7 @@
 "   * g:RspecRBFilePath      :: Path to vim-rspec.rb
 "   * g:RspecBin             :: Rspec binary command (in rspec 2 this is 'rspec')
 "   * g:RspecOpts            :: Opts to send to rspec call
-"   * g:RspecSplitHorizontal :: Set to 1 to cause horizontal split (default:0)
+"   * g:RspecSplitHorizontal :: Set to 0 to cause Vertical split (default:1)
 
 let s:hpricot_cmd    = ""
 let s:hpricot      = 0
@@ -48,7 +48,7 @@ endfunction
 
 function! s:createOutputWin()
   if !exists("g:RspecSplitHorizontal")
-    let g:RspecSplitHorizontal=0
+    let g:RspecSplitHorizontal=1
   endif
 
   let splitLocation = "botright "
