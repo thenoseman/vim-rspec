@@ -17,7 +17,7 @@ class RSpecOutputHandler
 
   def render_header
     stats = (@doc/"script").select {|script| script.innerHTML =~ /duration|totals/ }
-    stats.map! do |script| 
+    stats.map! do |script|
       script.inner_html.scan(/".*"/).first.gsub(/<\/?strong>/,"").gsub(/\"/,'')
     end
     failure_success_messages,other_stats = stats.partition {|stat| stat =~ /failure/}
@@ -34,9 +34,9 @@ class RSpecOutputHandler
     success_count = success.match(/(\d+) example/)[1].to_i
 
     if fail_count > 0
-      puts "--------------------------"
+      puts "---------------------------"
       puts "-#{failures}" 
-      puts "--------------------------"
+      puts "---------------------------"
       if 1.to_i > 0
         puts "+#{success_count} passes"
       end

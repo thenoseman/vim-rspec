@@ -12,10 +12,10 @@ INSTALL
 
 TODO
 -------
- * Phase out support for xslt. This code is doing too much right now. The ruby transform is fine.
  * Add support for running single it-blocks
  * Support for rspec2 (longer term, as I currently don't use it myself)
  * Custom paths for RunSpecs (e.g. fast_specs dir)
+ * Support for other testing frameworks (test/unit, shoulda), maybe
 
 USAGE
 -----
@@ -30,6 +30,7 @@ Enhancements by @skwp (Yan Pritzker)
  * When browsing errors in rspec window, hitting enter takes you to the code in other split (do not create new window)
  * Ability to hit 'n' in the rspec output to go to the next error (and the corresponding code in the split)
  * Unescape html so that brackets in stacktraces are correctly displayed
+ * Took out xslt support to focus the project on a ruby-based formatter
 
 Suggested Key Mappings
 -----

@@ -44,7 +44,7 @@ endfunction
 
 function! s:createOutputWin()
   let splitLocation = "botright "
-  let splitSize = "20"
+  let splitSize = "15"
 
   if bufexists('RSpecOutput')
     silent! bw! RSpecOutput
