@@ -18,6 +18,9 @@
 let s:hpricot_cmd    = ""
 let s:hpricot      = 0
 let s:helper_dir = expand("<sfile>:h")
+if !exists("g:RspecKeymap")
+  let g:RspecKeymap=1
+end
 
 function! s:find_hpricot()
   return system("gem search -i hpricot")
@@ -71,7 +74,7 @@ function! s:RunSpecMain(type)
   end
 
   if !s:hpricot
-    call s:error_msg("You need the hpricot gem or xsltproc to run this script.")
+    call s:error_msg("You need the hpricot gem to run this script.")
     return
   end
 
@@ -93,6 +96,18 @@ function! s:RunSpecMain(type)
       let l:spec_bin = s:fetch("RspecBin",l:default_cmd)
       let l:spec_opts = s:fetch("RspecOpts", "")
       let l:spec = l:spec_bin . " " . l:spec_opts . " -f h " . l:bufn
+    else
+      call s:error_msg("Seems ".l:bufn." is not a *_spec.rb file")
+      return
+    end
+  elseif a:type=="line"
+    if match(l:bufn,'_spec.rb')>=0
+      let l:current_line = line('.')
+
+      call s:notice_msg("Running spec on " . l:current_line . " ")
+      let l:spec_bin = s:fetch("RspecBin",l:default_cmd)
+      let l:spec_opts = s:fetch("RspecOpts", "")
+      let l:spec = l:spec_bin . " " . l:spec_opts . " -l " . l:current_line . " -f h " . l:bufn
     else
       call s:error_msg("Seems ".l:bufn." is not a *_spec.rb file")
       return
@@ -173,9 +188,21 @@ function! RunSpec()
   call s:RunSpecMain("file")
 endfunction
 
+function! RunSpecLine()
+  call s:RunSpecMain("line")
+endfunction
+
 function! RunSpecs()
   call s:RunSpecMain("dir")
 endfunction
 
 command! RunSpec  call RunSpec()
 command! RunSpecs  call RunSpecs()
+command! RunSpecLine  call RunSpecLine()
+
+if g:RspecKeymap==1
+  " Cmd-Shift-R for RSpec
+  nmap <D-R> :RunSpec<CR>
+  " Cmd-Shift-L for RSpec Current Line
+  nmap <D-L> :RunSpecLine<CR>
+endif

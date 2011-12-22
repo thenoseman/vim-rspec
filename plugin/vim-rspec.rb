@@ -58,4 +58,4 @@ class RSpecOutputHandler
 
 end
 
-renderer=RSpecOutputHandler.new(Hpricot(STDIN.read))
+renderer = RSpecOutputHandler.new(Hpricot(STDIN.read))

@@ -10,11 +10,6 @@ HISTORY
  * Original by Eustáquio Rangel (https://github.com/taq), development ended 11/2010
  * Modularized rewrite by Yan Pritzker (http://github.com/skwp) 12/2011. I am actively maintaining this fork.
 
-NOTE: This version is drastically different from the original taq/vim-rspec
-fork due to a large refactoring of the main codebase into a modularized
-form. If you have an old fork with custom changes, you may want to look
-at what's been done here.
-
 INSTALL
 -------
  * Requires: gem install hpricot
@@ -22,11 +17,15 @@ INSTALL
 
 USAGE
 -----
- * :RunSpec for current file or :RunSpecs for all files in spec dir
- * A split will open at the bottom. You can hit 'n' to go to the next error, or navigate to it and hit Enter to go to the line in the file.
+ * :RunSpec for current file
+ * :RunSpecLine for current line (current 'it' block)
+ * :RunSpecs for all files in spec dir
+ * A split will open vertically on the right (if you prefer horizontal, let g:RspecSplitHorizontal=1)
+ * You can hit 'n' to go to the next error, or navigate to it and hit Enter to go to the line in the file.
 
 Enhancements by @skwp (Yan Pritzker)
 -----
+ * Run rspec on current line (execute a single 'it' block)
  * Failures and Success is now displayed prominently at the top in green or red
  * Improved colors (for Solarized, specifically)
  * Run in same window, do not create a new window for every run
@@ -38,14 +37,27 @@ Enhancements by @skwp (Yan Pritzker)
 
 Suggested Key Mappings
 -----
+By default you get these keymappings. If you don't want them, turn them off with:
+
+    let g:RspecKeymap=0
+
 Run using Cmd-Shift-R:
 
-  map <D-R> :RunSpec<cr>
+    map <D-R> :RunSpec<cr>
+
+Run on current line (current 'it' block) Cmd-Shift-L:
+
+    map <D-L> :RunSpecLine<cr>
 
 TODO
 -------
  * Further refactoring to improve maintainability
- * Add support for running single it-blocks (rspec -l [linenum])
  * Support for rspec2 (longer term, as I currently don't use it myself)
  * Custom paths for RunSpecs (e.g. fast_specs dir)
  * Support for other testing frameworks (test/unit, shoulda), maybe
+
+NOTE: This version is drastically different from the original taq/vim-rspec
+fork due to a large refactoring of the main codebase into a modularized
+form. If you have an old fork with custom changes, you may want to look
+at what's been done here.
+
