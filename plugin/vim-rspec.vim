@@ -10,9 +10,10 @@
 " To install, unpack the files on your ~/.vim directory and source it 
 "
 " The following options can be set/overridden in your .vimrc
-"   * g:RspecRBFilePath  :: Path to vim-rspec.rb
-"   * g:RspecBin         :: Rspec binary command (in rspec 2 this is 'rspec')
-"   * g:RspecOpts        :: Opts to send to rspec call
+"   * g:RspecRBFilePath      :: Path to vim-rspec.rb
+"   * g:RspecBin             :: Rspec binary command (in rspec 2 this is 'rspec')
+"   * g:RspecOpts            :: Opts to send to rspec call
+"   * g:RspecSplitHorizontal :: Set to 1 to cause horizontal split (default:0)
 
 let s:hpricot_cmd    = ""
 let s:hpricot      = 0
@@ -43,14 +44,21 @@ function! s:fetch(varname, default)
 endfunction
 
 function! s:createOutputWin()
+  if !exists("g:RspecSplitHorizontal")
+    let g:RspecSplitHorizontal=0
+  endif
+
   let splitLocation = "botright "
-  let splitSize = "15"
 
   if bufexists('RSpecOutput')
     silent! bw! RSpecOutput
   end
 
-  silent! exec splitLocation . ' ' . splitSize . ' new'
+  if g:RspecSplitHorizontal == 1
+    silent! exec splitLocation . ' ' . ' new'
+  else
+    silent! exec splitLocation . ' ' . ' vnew'
+  end
   silent! exec "edit RSpecOutput"
 endfunction
 

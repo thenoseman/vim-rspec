@@ -1,4 +1,14 @@
-Vim with Rspec 2.x
+vim-rspec
+
+Beautiful, colorized RSpec tests in Vim with direct access to
+the line where the error occurred.
+
+![GreenScreenshot](http://i.imgur.com/PWutK.png)
+
+HISTORY
+-------
+ * Original by Eustáquio Rangel (https://github.com/taq), development ended 11/2010
+ * Modularized rewrite by Yan Pritzker (http://github.com/skwp) 12/2011. I am actively maintaining this fork.
 
 NOTE: This version is drastically different from the original taq/vim-rspec
 fork due to a large refactoring of the main codebase into a modularized
@@ -9,13 +19,6 @@ INSTALL
 -------
  * Requires: gem install hpricot
  * Install with pathogen: clone/submodule into vim/bundle
-
-TODO
--------
- * Add support for running single it-blocks
- * Support for rspec2 (longer term, as I currently don't use it myself)
- * Custom paths for RunSpecs (e.g. fast_specs dir)
- * Support for other testing frameworks (test/unit, shoulda), maybe
 
 USAGE
 -----
@@ -31,6 +34,7 @@ Enhancements by @skwp (Yan Pritzker)
  * Ability to hit 'n' in the rspec output to go to the next error (and the corresponding code in the split)
  * Unescape html so that brackets in stacktraces are correctly displayed
  * Took out xslt support to focus the project on a ruby-based formatter
+ * Default to vertical split, use "let g:RspecSplitHorizontal=1" in vimrc to split horizontally
 
 Suggested Key Mappings
 -----
@@ -38,6 +42,10 @@ Run using Cmd-Shift-R:
 
   map <D-R> :RunSpec<cr>
 
-Credits
------
- * Original plugin by Eustáquio Rangel: https://github.com/taq
+TODO
+-------
+ * Further refactoring to improve maintainability
+ * Add support for running single it-blocks (rspec -l [linenum])
+ * Support for rspec2 (longer term, as I currently don't use it myself)
+ * Custom paths for RunSpecs (e.g. fast_specs dir)
+ * Support for other testing frameworks (test/unit, shoulda), maybe
