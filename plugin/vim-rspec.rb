@@ -9,6 +9,11 @@ class RSpecOutputHandler
 
   def initialize(doc)
     @doc=doc
+    @counts={
+      :passed => 0,
+      :failed => 0,
+      :not_implemented => 0
+    }
     render_header
     render_examples
   end
@@ -23,35 +28,31 @@ class RSpecOutputHandler
     failure_success_messages,other_stats = stats.partition {|stat| stat =~ /failure/}
     render_red_green_header(failure_success_messages.first)
     other_stats.each do |stat|
-      puts "*#{stat}"
+      puts stat
     end
     puts " "
   end
 
   def render_red_green_header(failure_success_messages)
-    success,failures = failure_success_messages.split(", ")
-    fail_count = failures.match(/(\d+) failure/)[1].to_i
-    success_count = success.match(/(\d+) example/)[1].to_i
+    total_count = failure_success_messages.match(/(\d+) example/)[1].to_i rescue 0
+    fail_count = failure_success_messages.match(/(\d+) failure/)[1].to_i rescue 0
+    pending_count = failure_success_messages.match(/(\d+) pending/)[1].to_i rescue 0
 
     if fail_count > 0
-      puts "---------------------------"
-      puts "-#{failures}" 
-      puts "---------------------------"
-      if 1.to_i > 0
-        puts "+#{success_count} passes"
-      end
+      puts "------------------------------"
+      puts " FAIL: #{fail_count} PASS: #{total_count - (fail_count + pending_count)} PENDING: #{pending_count}"
+      puts "------------------------------"
     else
-      puts "+++++++++++++++++++++++++++"
-      puts "+All #{success_count} Specs Pass!"
-      puts "+++++++++++++++++++++++++++"
+      puts "++++++++++++++++++++++++++++++"
+      puts "+ PASS: All #{total_count} Specs Pass!"
+      puts "++++++++++++++++++++++++++++++"
     end
 
-    puts " "
   end
 
   def render_examples
     (@doc/"div[@class='example_group']").each do |context|
-      RSpecContextRenderer.new(context)
+      RSpecContextRenderer.new(context, @counts)
     end
   end
 

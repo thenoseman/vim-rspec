@@ -1,7 +1,10 @@
 syntax match rspecHeader /^*.*/
 syntax match rspecTitle /^\[.\+/
 syntax match rspecOk /^+.\+/
+syntax match rspecOk /PASS.\+/
 syntax match rspecError /^-.\+/
+syntax match rspecError /FAIL.\+/
+syntax match rspecError /^|.\+/
 syntax match rspecErrorDetail /^  \w.\+/
 syntax match rspecErrorURL /^  \/.\+/
 syntax match rspecNotImplemented /^#.\+/

@@ -1,6 +1,10 @@
 class RSpecContextRenderer
-  def initialize(context)
+  # context: an html representation of an rspec context from rspec output
+  # counts: a hash with :passed, :failed, :not_implemented counters
+  def initialize(context, counts)
     @context=context
+    @counts=counts
+
     render_context_header
     render_specs
     puts " "
@@ -22,5 +26,7 @@ class RSpecContextRenderer
     classes = {"spec passed"=>"+","spec failed"=>"-","spec not_implemented"=>"#"}
     txt = (dd/"span:first").inner_html
     puts "#{classes[dd[:class]]} #{txt}"
+    outcome = dd[:class].gsub(/\s*spec\s*/,'').to_sym
+    @counts[outcome] += 1
   end
 end
