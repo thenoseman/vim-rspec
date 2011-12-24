@@ -52,21 +52,23 @@ function! s:createOutputWin()
   endif
 
   let splitLocation = "botright "
+  let splitSize = 15
 
   if bufexists('RSpecOutput')
     silent! bw! RSpecOutput
   end
 
   if g:RspecSplitHorizontal == 1
-    silent! exec splitLocation . ' ' . ' new'
+    silent! exec splitLocation . ' ' . splitSize .  ' new'
   else
-    silent! exec splitLocation . ' ' . ' vnew'
+    silent! exec splitLocation . ' ' . splitSize . ' vnew'
   end
   silent! exec "edit RSpecOutput"
 endfunction
 
 function! s:RunSpecMain(type)
   let l:bufn = bufname("%")
+  let s:SpecFile = l:bufn
 
   if len(s:hpricot_cmd)<1
     let s:hpricot_cmd = s:find_hpricot()
@@ -92,7 +94,7 @@ function! s:RunSpecMain(type)
   " run just the current file
   if a:type=="file"
     if match(l:bufn,'_spec.rb')>=0
-      call s:notice_msg("Running spec on the current file...")
+      call s:notice_msg("Running " . s:SpecFile . "...")
       let l:spec_bin = s:fetch("RspecBin",l:default_cmd)
       let l:spec_opts = s:fetch("RspecOpts", "")
       let l:spec = l:spec_bin . " " . l:spec_opts . " -f h " . l:bufn
@@ -104,7 +106,7 @@ function! s:RunSpecMain(type)
     if match(l:bufn,'_spec.rb')>=0
       let l:current_line = line('.')
 
-      call s:notice_msg("Running spec on " . l:current_line . " ")
+      call s:notice_msg("Running Line " . l:current_line . " on " . s:SpecFile . " ")
       let l:spec_bin = s:fetch("RspecBin",l:default_cmd)
       let l:spec_opts = s:fetch("RspecOpts", "")
       let l:spec = l:spec_bin . " " . l:spec_opts . " -l " . l:current_line . " -f h " . l:bufn
@@ -145,8 +147,6 @@ function! s:RunSpecMain(type)
 
   " run the spec command
   let s:cmd  = l:spec." | ".l:filter
-  echo
-
 
   "put the result on a new buffer
   call s:createOutputWin()
@@ -154,16 +154,31 @@ function! s:RunSpecMain(type)
   silent exec "r! ".s:cmd
   setl syntax=vim-rspec
   silent exec "nnoremap <buffer> <cr> :call <SID>TryToOpen()<cr>"
-  silent exec 'nnoremap <silent> <buffer> n /\/.*\:<cr>:call <SID>TryToOpen()<cr>'
-  silent exec 'nnoremap <silent> <buffer> N ?/\/.*\:<cr>:call <SID>TryToOpen()<cr>'
+  silent exec 'nnoremap <silent> <buffer> n /\/.*spec.*\:<cr>:call <SID>TryToOpen()<cr>'
+  silent exec 'nnoremap <silent> <buffer> N ?/\/.*spec.*\:<cr>:call <SID>TryToOpen()<cr>'
   silent exec "nnoremap <buffer> q :q<CR>"
   setl nolist
-  setl nohls
   setl foldmethod=expr
   setl foldexpr=getline(v:lnum)=~'^\+'
   setl foldtext=\"+--\ \".string(v:foldend-v:foldstart+1).\"\ passed\ \"
   call cursor(1,1)
 
+endfunction
+
+function! s:FindWindowByBufferName(buffername)
+  let l:windowNumberToBufnameList = map(range(1, winnr('$')), '[v:val, bufname(winbufnr(v:val))]')
+  let l:arrayIndex = match(l:windowNumberToBufnameList, a:buffername)
+  let l:windowNumber = windowNumberToBufnameList[l:arrayIndex][0]
+  return l:windowNumber
+endfunction
+
+function! s:SwitchToWindowNumber(number)
+  exe a:number . "wincmd w"
+endfunction
+
+function! s:SwitchToWindowByName(buffername)
+  let l:windowNumber = s:FindWindowByBufferName(a:buffername)
+  call s:SwitchToWindowNumber(l:windowNumber)
 endfunction
 
 function! s:TryToOpen()
@@ -175,8 +190,7 @@ function! s:TryToOpen()
   let l:tokens = split(l:line,":")
 
   " move back to the other window, if available
-  " if there is no other window this will do nothing
-  wincmd w
+  call s:SwitchToWindowByName(s:SpecFile)
 
   " open the file in question (either in the split)
   " that was already open, or in the current win
