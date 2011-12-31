@@ -183,10 +183,10 @@ endfunction
 
 function! s:TryToOpen()
   " Search up to find '*_spec.rb'
-  call search("_spec","bW")
+  call search("_spec","bcW")
   let l:line = getline(".")
   if match(l:line,'^  .*_spec.rb')<0
-    call s:error_msg("No file found.")
+    call s:error_msg("No spec file found.")
     return
   end
   let l:tokens = split(l:line,":")
