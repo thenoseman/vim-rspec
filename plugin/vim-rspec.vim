@@ -182,8 +182,10 @@ function! s:SwitchToWindowByName(buffername)
 endfunction
 
 function! s:TryToOpen()
+  " Search up to find '*_spec.rb'
+  call search("_spec","bW")
   let l:line = getline(".")
-  if match(l:line,'^  [\/\.]')<0
+  if match(l:line,'^  .*_spec.rb')<0
     call s:error_msg("No file found.")
     return
   end
