@@ -5,6 +5,7 @@ class RSpecContextRenderer
   def initialize(context, counts)
     @context=context
     @counts=counts
+    @classes = {"passed"=>"+","failed"=>"-","not_implemented"=>"#"}
     render_context_header
     render_specs
     puts " "
@@ -23,10 +24,10 @@ class RSpecContextRenderer
   end
 
   def render_spec_descriptor(dd)
-    classes = {"example passed"=>"+","example failed"=>"-","example not_implemented"=>"#"}
     txt = (dd/"span:first").inner_html
-    puts "#{classes[dd[:class]]} #{txt}"
-    outcome = dd[:class].gsub("example ",'').to_sym
+    clazz = dd[:class].gsub(/(?:example|spec) /,'')
+    puts "#{@classes[clazz]} #{txt}"
+    outcome = clazz.to_sym
     @counts[outcome] += 1
   end
 end
