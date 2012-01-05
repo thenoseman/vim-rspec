@@ -23,7 +23,7 @@ USAGE
  * A split will open vertically on the right (if you prefer vertical, let g:RspecSplitHorizontal=0)
  * You can hit 'n' to go to the next error, or navigate to it and hit Enter to go to the line in the file.
 
-Enhancements by @skwp (Yan Pritzker)
+Enhancements
 -----
  * Run rspec on current line (execute a single 'it' block)
  * Failures and Success is now displayed prominently at the top in green or red
@@ -34,6 +34,8 @@ Enhancements by @skwp (Yan Pritzker)
  * Unescape html so that brackets in stacktraces are correctly displayed
  * Took out xslt support to focus the project on a ruby-based formatter
  * Default to horizontal split, use "let g:RspecSplitHorizontal=0" in vimrc to split vertical 
+ * Support for RSpec1 and RSpec2 (@thenoseman)
+ * Automatically find the window with the spec (@thenoseman)
 
 Suggested Key Mappings
 -----
@@ -52,7 +54,6 @@ Run on current line (current 'it' block) Cmd-Shift-L:
 TODO
 -------
  * Further refactoring to improve maintainability
- * Support for rspec2 (longer term, as I currently don't use it myself)
  * Custom paths for RunSpecs (e.g. fast_specs dir)
  * Support for other testing frameworks (test/unit, shoulda), maybe
 
@@ -60,4 +61,3 @@ NOTE: This version is drastically different from the original taq/vim-rspec
 fork due to a large refactoring of the main codebase into a modularized
 form. If you have an old fork with custom changes, you may want to look
 at what's been done here.
-
