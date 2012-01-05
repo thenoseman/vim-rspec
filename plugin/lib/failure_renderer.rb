@@ -37,7 +37,11 @@ class FailureRenderer
   end
 
   def backtrace_lines
-    (@failure/"pre[@class='ruby']/code").inner_html.scan(/(<span class="linenum">)(\d+)(<\/span>)(.*)/)
+    (@failure/"pre[@class='ruby']/code").inner_html.scan(/(<span class="linenum">)(\d+)(<\/span>)(.*)/).reject { |line| line[3] =~ ignore_line_if_matches }
+  end
+
+  def ignore_line_if_matches
+    /install syntax to get syntax highlighting/
   end
 
 end
