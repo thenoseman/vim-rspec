@@ -17,9 +17,16 @@ class RSpecContextRenderer
   end
 
   def render_specs
-    (@context/"dd").each do |dd|
-      render_spec_descriptor(dd)
-      FailureRenderer.new(dd/"div[@class~='failure']") if dd[:class] =~ /failed/
+    (@context/"dl").each do |dl|
+      dl.children.each do |child|
+        if child.is_a?(Hpricot::Elem) && child.name == 'dd'
+          render_spec_descriptor(child)
+          FailureRenderer.new(child/"div[@class~='failure']") if child[:class] =~ /failed/
+        elsif child.is_a?(Hpricot::Text)
+          text=child.to_s.strip
+          puts text unless text.empty?
+        end
+      end
     end
   end
 
